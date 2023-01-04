@@ -12,5 +12,5 @@ con.Open();
 
 var version = con.Query<Person>("select * from Person").ToList();
 
-version.ForEach(person => Console.WriteLine($"{person.Id}, {person.FirstName}"));
+version.ForEach(person => Console.WriteLine($"{person.Id}, {person.FirstName}, {person.LastName}"));
 con.Close();
