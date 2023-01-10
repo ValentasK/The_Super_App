@@ -3,11 +3,11 @@ using MediatR;
 
 namespace API.V1.Queries
 {
-    public class GetOrderByIdQuery : IRequest<OrderResponse>
+    public class GetCustomerByIdQuery : IRequest<CustomerResponse>
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
-        public GetOrderByIdQuery(Guid id)
+        public GetCustomerByIdQuery(int id)
         {
             Id = id;
         }
