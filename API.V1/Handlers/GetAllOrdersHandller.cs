@@ -16,7 +16,7 @@ namespace API.V1.Handlers
             using var con = new SqlConnection(cs);
             con.Open();
 
-            string sql = "select * from [DapperDB].[dbo].[Person] as P\r\n  left join [DapperDB].[dbo].[Phone] as ph on p.CellPhoneId = ph.Id\t";
+            string sql = "select * from [DapperDB].[dbo].[Person] as P left join [DapperDB].[dbo].[Phone] as ph on p.CellPhoneId = ph.Id";
             var p = new DynamicParameters();
 
             var customers = con.Query<CustomerResponse>(sql,p).ToList();
