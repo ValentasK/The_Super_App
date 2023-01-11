@@ -18,6 +18,7 @@ namespace API.V1
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+            builder.Services.Configure<SupperAppSettings>(builder.Configuration.GetSection(SupperAppSettings.CustomSettings));
 
             var app = builder.Build();
 

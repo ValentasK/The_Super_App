@@ -5,19 +5,22 @@ using Microsoft.Data.SqlClient;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace API.V1.Handlers
 {
     public class GetAllCustomersHandller : IRequestHandler<GetAllCustomersQuery, List<CustomerResponse>>
     {
          IConfiguration _configuration;
-        public GetAllCustomersHandller(IConfiguration configuration)
+        private readonly SupperAppSettings _options;
+        public GetAllCustomersHandller(IConfiguration configuration, IOptions<SupperAppSettings> options)
         {
             _configuration = configuration;
+            _options = options.Value;
         }
         public async Task<List<CustomerResponse>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
         {
-            string? connectionString = _configuration.GetConnectionString("myDb1");
+            string? connectionString = _configuration.GetConnectionString(_options.ConnectionStr);
 
             using var con = new SqlConnection(connectionString);
             con.Open();
