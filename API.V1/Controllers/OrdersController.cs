@@ -8,12 +8,12 @@ namespace API.V1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Orders : ControllerBase
+    public class OrdersController : ControllerBase
     {
 
         private readonly IMediator _mediator;
 
-        public Orders(IMediator mediator)
+        public OrdersController(IMediator mediator)
         {
             _mediator = mediator;
         }

@@ -3,22 +3,29 @@ using API.V1.Responses;
 using Dapper;
 using MediatR;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 
 namespace API.V1.Handlers
 {
     public class GetCustomerByIdHandler : IRequestHandler<GetCustomerByIdQuery, CustomerResponse>
     {
+        IConfiguration _configuration;
+        private readonly SupperAppSettings _options;
+
+        public GetCustomerByIdHandler(IConfiguration configuration, IOptions<SupperAppSettings> options)
+        {
+            _configuration = configuration;
+            _options = options.Value;
+        }
         public async Task<CustomerResponse> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
         {
-            var cs = @"Server=(localdb)\MSSQLLocalDB;Database=DapperDB;Trusted_Connection=True;";
-            using var con = new SqlConnection(cs);
+            using var con = new SqlConnection(_configuration.GetConnectionString(_options.ConnectionStr));
             con.Open();
 
-            string sql = "select * from [DapperDB].[dbo].[Person] as P left join [DapperDB].[dbo].[Phone] as ph on p.CellPhoneId = ph.Id where p.Id = @Id;";
             var p = new DynamicParameters();
             p.Add("@Id", request.Id);
 
-            var customer = con.QueryFirst<CustomerResponse>(sql, p);
+            var customer = con.QueryFirst<CustomerResponse>(sqlQueries.GetCustomerById, p);
 
             return customer;
         }
