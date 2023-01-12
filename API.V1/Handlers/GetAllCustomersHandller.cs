@@ -11,7 +11,7 @@ namespace API.V1.Handlers
 {
     public class GetAllCustomersHandller : IRequestHandler<GetAllCustomersQuery, List<CustomerResponse>>
     {
-         IConfiguration _configuration;
+        IConfiguration _configuration;
         private readonly SupperAppSettings _options;
         public GetAllCustomersHandller(IConfiguration configuration, IOptions<SupperAppSettings> options)
         {
@@ -20,15 +20,10 @@ namespace API.V1.Handlers
         }
         public async Task<List<CustomerResponse>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
         {
-            string? connectionString = _configuration.GetConnectionString(_options.ConnectionStr);
-
-            using var con = new SqlConnection(connectionString);
+            using var con = new SqlConnection(_configuration.GetConnectionString(_options.ConnectionStr));
             con.Open();
 
-            string sql = "select * from [DapperDB].[dbo].[Person] as P left join [DapperDB].[dbo].[Phone] as ph on p.CellPhoneId = ph.Id";
-            var p = new DynamicParameters();
-
-            var customers = con.Query<CustomerResponse>(sql, p).ToList();
+            var customers = con.Query<CustomerResponse>(sqlQueries.GetAllCustomers).ToList();
 
             return customers;
         }
