@@ -3,7 +3,7 @@ using MediatR;
 
 namespace API.V1.Commands
 {
-    public class CreateCustomerOrderCommand : IRequest<CustomerResponse>
+    public class CreateCustomerCommand : IRequest<CustomerResponse>
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

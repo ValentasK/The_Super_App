@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace API.V1.Handlers
 {
-    public class CreateCustomerHandler : IRequestHandler<CreateCustomerOrderCommand, CustomerResponse>
+    public class CreateCustomerHandler : IRequestHandler<CreateCustomerCommand, CustomerResponse>
     {
         IConfiguration _configuration;
         private readonly SupperAppSettings _options;
@@ -18,7 +18,7 @@ namespace API.V1.Handlers
             _configuration = configuration;
             _options = options.Value;
         }
-        public Task<CustomerResponse> Handle(CreateCustomerOrderCommand request, CancellationToken cancellationToken)
+        public Task<CustomerResponse> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
             using var con = new SqlConnection(_configuration.GetConnectionString(_options.ConnectionStr));
             con.Open();
