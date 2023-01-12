@@ -37,7 +37,7 @@ namespace API.V1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] CreateCustomerOrderCommand command)
+        public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerOrderCommand command)
         {
             var order = await _mediator.Send(command);
             return Ok(order);
