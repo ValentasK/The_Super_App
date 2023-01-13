@@ -18,29 +18,29 @@ namespace API.V1.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("/customer")]
         public async Task<IActionResult> Get()
         {
             var query = new GetAllCustomersQuery();
-            var orders = await _mediator.Send(query);
-            return Ok(orders);
+            var customers = await _mediator.Send(query);
+            return Ok(customers);
 
         }
 
-        [HttpGet("/{orderId}")]
-        public async Task<IActionResult> Get(int orderId)
+        [HttpGet("/customer/{customerId}")]
+        public async Task<IActionResult> Get(int customerId)
         {
-            var query = new GetCustomerByIdQuery(orderId);
-            var order = await _mediator.Send(query);
-            return order != null ? Ok(order) : NotFound();
+            var query = new GetCustomerByIdQuery(customerId);
+            var customer = await _mediator.Send(query);
+            return customer != null ? Ok(customer) : NotFound();
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] CreateCustomerOrderCommand command)
+        [HttpPost("/customer")]
+        public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerCommand command)
         {
-            var order = await _mediator.Send(command);
-            return Ok(order);
+            var customer = await _mediator.Send(command);
+            return Ok(customer);
 
         }
     }
