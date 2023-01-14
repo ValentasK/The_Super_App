@@ -1,6 +1,7 @@
 ﻿using API.V1.Commands;
 using API.V1.Queries;
 using API.V1.Responses;
+using Cqrs.Commands;
 using Dapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace API.V1.Handlers
 {
-    public class CreateCustomerHandler : IRequestHandler<CreateCustomerCommand, CustomerResponse>
+    public class CreateCustomerHandler :IRequestHandler <CreateCustomerCommand, CreateResponse>
     {
         IConfiguration _configuration;
         private readonly SupperAppSettings _options;
@@ -18,7 +19,7 @@ namespace API.V1.Handlers
             _configuration = configuration;
             _options = options.Value;
         }
-        public Task<CustomerResponse> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+        public Task<CreateResponse> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
             using var con = new SqlConnection(_configuration.GetConnectionString(_options.ConnectionStr));
             con.Open();
@@ -28,9 +29,10 @@ namespace API.V1.Handlers
             p.Add("@LastName", request.LastName);
             p.Add("@PhoneNumber", request.PhoneNumber);
 
-            var customer = con.Execute(sqlQueries.CreateCustomer, p);
+            var customerId = con.QueryFirst<CreateResponse>(sqlQueries.CreateCustomer, p);
 
-            return Task.FromResult(new CustomerResponse());
+            return Task.FromResult(customerId);
         }
+        
     }
 }
