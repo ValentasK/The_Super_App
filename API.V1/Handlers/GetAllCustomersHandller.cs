@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace API.V1.Handlers
 {
-    public class GetAllCustomersHandller : IRequestHandler<GetAllCustomersQuery, List<CustomerResponse>>
+    public class GetAllCustomersHandller : IRequestHandler<GetAllCustomersQuery, IEnumerable<CustomerResponse>>
     {
         IConfiguration _configuration;
         private readonly SupperAppSettings _options;
@@ -18,12 +18,12 @@ namespace API.V1.Handlers
             _configuration = configuration;
             _options = options.Value;
         }
-        public async Task<List<CustomerResponse>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CustomerResponse>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
         {
             using var con = new SqlConnection(_configuration.GetConnectionString(_options.ConnectionStr));
             con.Open();
 
-            var customers = con.Query<CustomerResponse>(sqlQueries.GetAllCustomers).ToList();
+            var customers = await con.QueryAsync<CustomerResponse>(sqlQueries.GetAllCustomers);
 
             return customers;
         }

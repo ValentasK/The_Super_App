@@ -20,6 +20,7 @@ namespace API.V1.Queries
             "VALUES ( @PhoneNumber, 0); " +
             "INSERT INTO [dbo].[Person] ([FirstName],[LastName],[PhoneId]) " +
             "VALUES (@FirstName,@LastName, scope_identity());" +
+            "select scope_identity() as Id;" +
             "COMMIT";
     }
 }
