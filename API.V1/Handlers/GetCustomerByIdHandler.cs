@@ -25,7 +25,7 @@ namespace API.V1.Handlers
             var p = new DynamicParameters();
             p.Add("@Id", request.Id);
 
-            var customer = con.QueryFirst<CustomerResponse>(sqlQueries.GetCustomerById, p);
+            var customer = await con.QueryFirstAsync<CustomerResponse>(sqlQueries.GetCustomerById, p);
 
             return customer;
         }

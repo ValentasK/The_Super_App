@@ -19,7 +19,7 @@ namespace API.V1.Handlers
             _configuration = configuration;
             _options = options.Value;
         }
-        public Task<CreateResponse> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<CreateResponse> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
         {
             using var con = new SqlConnection(_configuration.GetConnectionString(_options.ConnectionStr));
             con.Open();
@@ -29,9 +29,9 @@ namespace API.V1.Handlers
             p.Add("@LastName", request.LastName);
             p.Add("@PhoneNumber", request.PhoneNumber);
 
-            var customerId = con.QueryFirst<CreateResponse>(sqlQueries.CreateCustomer, p);
+            var customerId = await con.QueryFirstAsync<CreateResponse>(sqlQueries.CreateCustomer, p);
 
-            return Task.FromResult(customerId);
+            return customerId;
         }
         
     }
